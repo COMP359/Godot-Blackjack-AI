@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cm827yp40r4n7"
-path="res://.godot/imported/red_joker.png-5eefb83cc6df17ff9b3f4082c1c2270c.ctex"
+uid="uid://boe34dnbhb1a6"
+path="res://.godot/imported/black_joker.png-19df7453ef6192ffa26ee1915b21592c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://images/cards/red_joker.png"
-dest_files=["res://.godot/imported/red_joker.png-5eefb83cc6df17ff9b3f4082c1c2270c.ctex"]
+source_file="res://images/cards_alternatives/black_joker.png"
+dest_files=["res://.godot/imported/black_joker.png-19df7453ef6192ffa26ee1915b21592c.ctex"]
 
 [params]
 
