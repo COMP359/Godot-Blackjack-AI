@@ -14,3 +14,7 @@ config/name="Godot_Blackjack_AI"
 run/main_scene="res://main-scene/main_scene.tscn"
 config/features=PackedStringArray("4.2", "Forward Plus")
 config/icon="res://icon.svg"
+
+[dotnet]
+
+project/assembly_name="Godot_Blackjack_AI"
