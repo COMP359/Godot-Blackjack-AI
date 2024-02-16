@@ -18,12 +18,12 @@ func create_card_data():
 	
 	# Load card images into the dictionary
 	for name in card_names:
-		var path = "res://images/cards/" + name + ".png"
+		var path = "res://images/cards_pixel/" + name + ".png"
 		var image = ResourceLoader.load(path)
 		card_images[name] = image
 		
 	#add the the of card image with key "back"
-	var back_image_path = "res://images/cards_alternatives/card_back.png"
+	var back_image_path = "res://images/cards_alternatives/card_back_pix.png"
 	var back_image = ResourceLoader.load(back_image_path)
 	card_images["back"] = back_image
 	
