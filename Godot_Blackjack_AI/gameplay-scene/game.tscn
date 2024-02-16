@@ -1,8 +1,6 @@
-[gd_scene load_steps=4 format=3 uid="uid://d11lim1u2e24i"]
+[gd_scene load_steps=2 format=3 uid="uid://d11lim1u2e24i"]
 
 [ext_resource type="Script" path="res://gameplay-scene/game-logic.gd" id="1_n2enm"]
-[ext_resource type="Texture2D" uid="uid://bfl3q1ohbp03n" path="res://images/cards_alternatives/card_back.png" id="1_yboye"]
-[ext_resource type="Texture2D" uid="uid://caeh6bo4qtr4o" path="res://images/cards/king_clubs.png" id="2_p1d3m"]
 
 [node name="Control" type="Control"]
 layout_mode = 3
@@ -29,21 +27,5 @@ text = "HIT"
 [node name="Stand" type="Button" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "STAND"
-
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
-layout_mode = 0
-offset_right = 407.0
-offset_bottom = 278.0
-alignment = 1
-
-[node name="Card-Back" type="TextureRect" parent="HBoxContainer"]
-layout_mode = 2
-texture = ExtResource("1_yboye")
-expand_mode = 3
-
-[node name="Card-Front" type="TextureRect" parent="HBoxContainer"]
-layout_mode = 2
-texture = ExtResource("2_p1d3m")
-expand_mode = 3
 
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Hit" to="." method="_on_hit_pressed"]

@@ -3,9 +3,6 @@ extends Control
 var card_names = []
 var card_images = {}
 
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	create_card_data()
 
 func create_card_data():
 	# Generate card names for ranks 2 to 10
@@ -25,18 +22,27 @@ func create_card_data():
 		var image = ResourceLoader.load(path)
 		card_images[name] = image
 		
+	#add the the of card image with key "back"
+	var back_image_path = "res://images/cards_alternatives/card_back.png"
+	var back_image = ResourceLoader.load(back_image_path)
+	card_images["back"] = back_image
+	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	pass
-
-func generate_card(x_percent, y_percent):
+	
+func generate_card(x_percent, y_percent, back=false):
 	# Assuming you have already loaded card images into the dictionary as shown in your code
 	# Get a random card name
 	var random_card_name = card_names[randi() % card_names.size()]
 
 	# Get the image corresponding to the random card name
 	var random_card_image = card_images[random_card_name]
-
+	
+	#if back is true assign card image to back
+	if back == true:
+		random_card_image = card_images["back"]
+		
 	# Create a Sprite2D node to display the card image
 	var card_sprite = Sprite2D.new()
 	card_sprite.texture = random_card_image
@@ -55,8 +61,18 @@ func generate_card(x_percent, y_percent):
 	# Add the Sprite node to the scene (assuming this code is in a Node or Control)
 	add_child(card_sprite)
 
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	#create cards
+	create_card_data()
+	#generate dealers cards note how first one is true as we want to show the back
+	generate_card(45,30,true)
+	generate_card(55,30)
+	
+	#generate users cards
+	generate_card(40, 70)
+	generate_card(60,70)
 
 
 func _on_hit_pressed():
-	generate_card(10, 70)
-	generate_card(30,70)
+	generate_card(80,70)
