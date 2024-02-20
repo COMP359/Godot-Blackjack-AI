@@ -4,32 +4,46 @@
 
 [node name="Menu" type="Control"]
 layout_mode = 3
+anchor_right = 1.00174
+anchor_bottom = 1.00309
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_dg3ai")
+metadata/_edit_use_anchors_ = true
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_right = -905.0
+offset_bottom = -34.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_dg3ai")
-
-[node name="MarginContainer" type="MarginContainer" parent="."]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
 layout_mode = 2
+size_flags_vertical = 8
 
 [node name="StartButton" type="Button" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
-text = "Play"
+theme_override_font_sizes/font_size = 40
+text = "   Play"
+alignment = 0
 
 [node name="Options" type="Button" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
-text = "Options"
+theme_override_font_sizes/font_size = 40
+text = "   Options"
+alignment = 0
 
 [node name="CloseGame" type="Button" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
-text = "Exit"
+theme_override_font_sizes/font_size = 40
+text = "   Exit"
+alignment = 0
 
 [connection signal="pressed" from="MarginContainer/VBoxContainer/StartButton" to="." method="_on_start_button_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/Options" to="." method="_on_options_pressed"]

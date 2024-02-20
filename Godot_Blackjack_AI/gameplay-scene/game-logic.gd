@@ -1,78 +1,95 @@
 extends Control
 
 var card_names = []
+var card_values = []
 var card_images = {}
 
+var cardsShuffled = {}
 
 func create_card_data():
 	# Generate card names for ranks 2 to 10
 	for rank in range(2, 11):
 		for suit in ["clubs", "diamonds", "hearts", "spades"]:
 			card_names.append(str(rank) + "_" + suit)
+			card_values.append(rank)
 
 	# Generate card names for face cards (jack, queen, king, ace)
 	for face_card in ["jack", "queen", "king", "ace"]:
 		for suit in ["clubs", "diamonds", "hearts", "spades"]:
 			card_names.append(face_card + "_" + suit)
+			if face_card != "ace":
+				card_values.append(10)
+			else:
+				card_values.append(11)	
 	
-	
-	# Load card images into the dictionary
-	for name in card_names:
-		var path = "res://images/cards_pixel/" + name + ".png"
-		var image = ResourceLoader.load(path)
-		card_images[name] = image
+	# Load card values and image paths into the dictionary
+	for card in range(len(card_names)):
+		card_images[card_names[card]] = [card_values[card], 
+			"res://images/cards_pixel/" + card_names[card] + ".png"]
 		
 	#add the the of card image with key "back"
-	var back_image_path = "res://images/cards_alternatives/card_back_pix.png"
-	var back_image = ResourceLoader.load(back_image_path)
-	card_images["back"] = back_image
+	card_images["back"] = [0, "res://images/cards_alternatives/card_back_pix.png"]
+	
+	cardsShuffled = card_names.duplicate()
+	cardsShuffled.shuffle()
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	pass
 	
-func generate_card(x_percent, y_percent, back=false):
+func generate_card(hand, back=false):
 	# Assuming you have already loaded card images into the dictionary as shown in your code
-	# Get a random card name
-	var random_card_name = card_names[randi() % card_names.size()]
+	var random_card
 
-	# Get the image corresponding to the random card name
-	var random_card_image = card_images[random_card_name]
-	
-	#if back is true assign card image to back
+	# if back is true assign card image to back
 	if back == true:
-		random_card_image = card_images["back"]
+		random_card = card_images["back"]
+	else:
+		# Get a random card
+		var random_card_name = cardsShuffled.pop_back() #card_names[randi() % card_names.size()]
+		random_card = card_images[random_card_name] 
+		# random_card is an array [card value, card image path]
 		
 	# Create a Sprite2D node to display the card image
 	var card_sprite = Sprite2D.new()
-	card_sprite.texture = random_card_image
+	# Load the card texture
+	# Load the card texture
+	var card_texture = ResourceLoader.load(random_card[1])
 
-	# Get the size of the viewport
-	var viewport_size = get_viewport_rect().size
+	# Create a new TextureRect node
+	var card_texture_rect = TextureRect.new()
 
-	# Calculate the position
-	var position_x = viewport_size.x * x_percent / 100
-	var position_y = viewport_size.y * y_percent / 100
+	# Set the texture of the TextureRect node
+	card_texture_rect.texture = card_texture
 
-	# Set the position and scale of the card
-	card_sprite.scale = Vector2(0.5, 0.5)
-	card_sprite.position = Vector2(position_x, position_y)
+	# Set the scale of the card
+	card_texture_rect.set_size(Vector2(1,2))
 
-	# Add the Sprite node to the scene (assuming this code is in a Node or Control)
-	add_child(card_sprite)
+	# Get a reference to the existing HBoxContainer
+	var card_hand_container
+	if hand == "player":
+		card_hand_container = $MarginContainer/VBoxContainer/PlayerHand
+	#elif hand == "dealer":
+		#var card_hand_container = $MarginContainer/VBoxContainer/DealerHand
+	else:
+		return
+	# Add the card as a child to the HBoxContainer
+	card_hand_container.add_child(card_texture_rect)
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	#create cards
+	# Create cards
 	create_card_data()
-	#generate dealers cards note how first one is true as we want to show the back
-	generate_card(45,30,true)
-	generate_card(55,30)
 	
-	#generate users cards
-	generate_card(40, 70)
-	generate_card(60,70)
+	# Generate dealers cards; note how first one is true as we want to show the back
+	generate_card("dealer", true)
+	generate_card("dealer")
+	
+	# Generate player cards
+	generate_card("player")
+	generate_card("player")
 
 
 func _on_hit_pressed():
-	generate_card(80,70)
+	generate_card("player")
