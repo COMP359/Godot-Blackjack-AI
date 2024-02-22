@@ -18,8 +18,10 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = -905.0
-offset_bottom = -34.0
+offset_left = 89.0
+offset_top = 31.0
+offset_right = -952.341
+offset_bottom = -77.3373
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -29,22 +31,42 @@ size_flags_vertical = 8
 
 [node name="StartButton" type="Button" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 40
-text = "   Play"
-alignment = 0
-
-[node name="Options" type="Button" parent="MarginContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 40
-text = "   Options"
+theme_type_variation = &"FlatButton"
+theme_override_colors/font_color = Color(0.894118, 0.894118, 0.894118, 1)
+theme_override_font_sizes/font_size = 80
+text = "Play"
 alignment = 0
 
 [node name="CloseGame" type="Button" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 40
-text = "   Exit"
+theme_type_variation = &"FlatButton"
+theme_override_colors/font_color = Color(0.894118, 0.894118, 0.894118, 1)
+theme_override_font_sizes/font_size = 80
+text = "Exit"
 alignment = 0
 
+[node name="Label" type="Label" parent="MarginContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.894118, 0.894118, 0.894118, 1)
+theme_override_font_sizes/font_size = 100
+text = "BlackJack
+
+
+
+
+
+"
+
+[node name="Creds" type="Label" parent="."]
+layout_mode = 2
+offset_left = 99.0
+offset_top = 1096.0
+offset_right = 444.0
+offset_bottom = 1127.0
+theme_override_colors/font_color = Color(0.894118, 0.894118, 0.894118, 1)
+theme_override_font_sizes/font_size = 20
+text = "By Braedon McRae & Andrew Meier
+"
+
 [connection signal="pressed" from="MarginContainer/VBoxContainer/StartButton" to="." method="_on_start_button_pressed"]
-[connection signal="pressed" from="MarginContainer/VBoxContainer/Options" to="." method="_on_options_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/CloseGame" to="." method="_on_close_game_pressed"]
