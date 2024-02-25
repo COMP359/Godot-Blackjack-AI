@@ -77,9 +77,9 @@ script = ExtResource("1_n2enm")
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.8625
-anchor_top = 0.301852
+anchor_top = 0.259259
 anchor_right = 0.985937
-anchor_bottom = 0.97963
+anchor_bottom = 0.748148
 grow_horizontal = 2
 grow_vertical = 2
 metadata/_edit_use_anchors_ = true
@@ -102,14 +102,6 @@ size_flags_vertical = 3
 theme_override_fonts/font = ExtResource("2_sviuc")
 theme_override_font_sizes/font_size = 25
 text = "STAND"
-
-[node name="Exit" type="Button" parent="Buttons/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_colors/font_color = Color(1, 0.556863, 0.494118, 1)
-theme_override_fonts/font = ExtResource("2_sviuc")
-theme_override_font_sizes/font_size = 25
-text = "EXIT"
 
 [node name="Cards" type="MarginContainer" parent="."]
 layout_mode = 1
@@ -280,7 +272,19 @@ text = "PLAY
 AGAIN"
 alignment = 0
 
+[node name="Exit" type="Button" parent="."]
+layout_mode = 2
+offset_left = 1656.0
+offset_top = 951.0
+offset_right = 1893.0
+offset_bottom = 1058.0
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(1, 0.556863, 0.494118, 1)
+theme_override_fonts/font = ExtResource("2_sviuc")
+theme_override_font_sizes/font_size = 25
+text = "EXIT"
+
 [connection signal="pressed" from="Buttons/VBoxContainer/Hit" to="." method="_on_hit_pressed"]
 [connection signal="pressed" from="Buttons/VBoxContainer/Stand" to="." method="_on_stand_pressed"]
-[connection signal="pressed" from="Buttons/VBoxContainer/Exit" to="." method="_on_exit_pressed"]
 [connection signal="pressed" from="Replay" to="." method="_on_replay_pressed"]
+[connection signal="pressed" from="Exit" to="." method="_on_exit_pressed"]
