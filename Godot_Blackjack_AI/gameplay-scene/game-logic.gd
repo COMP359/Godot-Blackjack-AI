@@ -67,6 +67,7 @@ func _on_stand_pressed():
 	"""
 	$Buttons/VBoxContainer/Hit.disabled = true
 	$Buttons/VBoxContainer/Stand.disabled = true
+	$Buttons/VBoxContainer/OptimalMove.disabled = true
 	$DealerHitMarker.visible = true
 	$WhoseTurn.text = "Dealer's\nTurn"
 	
@@ -196,6 +197,7 @@ func playerLose():
 	$WinnerText.set("theme_override_colors/font_color", "ff5342")
 	$Buttons/VBoxContainer/Hit.disabled = true
 	$Buttons/VBoxContainer/Stand.disabled = true
+	$Buttons/VBoxContainer/OptimalMove.disabled = true
 	await get_tree().create_timer(1).timeout
 	$WinnerText.visible = true
 	await get_tree().create_timer(0.5).timeout
@@ -207,6 +209,8 @@ func playerWin(blackjack=false):
 		$WinnerText.text = "PLAYER WINS\nBY BLACKJACK"
 	$Buttons/VBoxContainer/Hit.disabled = true
 	$Buttons/VBoxContainer/Stand.disabled = true
+	$Buttons/VBoxContainer/OptimalMove.disabled = true
+	
 	await get_tree().create_timer(1).timeout
 	$WinnerText.visible = true
 	await get_tree().create_timer(0.5).timeout
@@ -218,6 +222,7 @@ func playerDraw():
 	$WinnerText.set("theme_override_colors/font_color", "white")
 	$Buttons/VBoxContainer/Hit.disabled = true
 	$Buttons/VBoxContainer/Stand.disabled = true
+	$Buttons/VBoxContainer/OptimalMove.disabled = true
 	await get_tree().create_timer(1).timeout
 	$WinnerText.visible = true
 	await get_tree().create_timer(0.5).timeout
@@ -230,3 +235,51 @@ func _on_exit_pressed():
 
 func _on_replay_pressed():
 	get_tree().change_scene_to_file("res://gameplay-scene/game.tscn")
+
+#THIS DOES NOT WORK FOR CASES WHERE PLAYER HAS ACES YET. WORKS FOR EVERYTHING ELSE THOUGH	
+func calculateTotal(cards):
+	var total = 0
+	var hasAce = false
+
+	for card in cards:
+		if card[0] == 11:  # Ace
+			hasAce = true
+		total += card[0]
+
+	if hasAce and total + 10 <= 21:
+		total += 10
+
+	return total
+	
+func _on_button_pressed():
+	var playerTotal = calculateTotal(playerCards)
+	print("Player total:", playerTotal)
+
+	var dealerUpCard = dealerCards[2][0]
+	print("Dealer up card:", dealerUpCard)
+	
+	if playerTotal >= 17 and playerTotal <= 20:
+		_on_stand_pressed()
+	elif playerTotal >= 13 and playerTotal <= 16:
+		if dealerUpCard >= 2 and dealerUpCard <= 6:
+			_on_stand_pressed()
+		else:
+			_on_hit_pressed()
+	elif playerTotal == 12:
+		if dealerUpCard >= 4 and dealerUpCard <= 6:
+			_on_stand_pressed()
+		else:
+			_on_hit_pressed()
+	elif playerTotal >= 4 and playerTotal <= 11:
+		_on_hit_pressed()
+	elif playerTotal == 21:
+		_on_stand_pressed()
+	elif playerTotal == 13 and dealerUpCard >= 7:
+		_on_hit_pressed()
+	elif playerTotal == 16 and dealerUpCard >= 7:
+		_on_hit_pressed()
+	elif playerTotal == 11 and dealerUpCard == 11:
+		_on_hit_pressed()
+	else:
+		_on_stand_pressed()	
+		
