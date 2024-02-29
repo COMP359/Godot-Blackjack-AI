@@ -58,7 +58,30 @@ func _on_hit_pressed():
 	if playerScore == 21:
 		_on_stand_pressed()  # Player auto-stands on 21
 	elif playerScore > 21:
-		playerLose()
+		check_aces()
+		if playerScore > 21:  # Score still surpasses 21
+			playerLose()
+			
+var ace_found
+func check_aces():
+	while playerScore > 21:
+		ace_found = false
+		for card_index in range(len(playerCards)):
+			if playerCards[card_index][0] == 11:  # Ace with value 11
+				playerCards[card_index][0] = 1  # Convert ace to 1
+				ace_found = true
+				break
+		if not ace_found:
+			break  # No more aces to convert, exit loop
+		recalculate_player_score()
+		updateText()
+	
+	
+func recalculate_player_score():
+	playerScore = 0
+	for card in playerCards:
+		playerScore += card[0]
+
 
 
 func _on_stand_pressed():
@@ -128,11 +151,6 @@ func create_card_data():
 			else:
 				card_values.append(11)	
 				
-	#Adds 4 times the amount of aces for testing
-	for i in range(4):
-		for suit in ["clubs", "diamonds", "hearts", "spades"]:
-			card_names.append("ace" + "_" + suit)
-			card_values.append(11)
 	
 	# Load card values and image paths into the dictionary
 	for card in range(len(card_names)):
@@ -244,13 +262,13 @@ func _on_replay_pressed():
 
 
 func _on_button_pressed():
-	print("Player score:", playerScore)
+	
 	
 	var dealerUpCard = dealerCards[2][0]
-	print("Dealer up card:", dealerUpCard)
+	
 
 	var hasAce = playerHasAce(playerCards)
-	print(hasAce)
+	
 	if hasAce:
 		# Handle cases when player has an ace
 		if playerScore >= 19:
