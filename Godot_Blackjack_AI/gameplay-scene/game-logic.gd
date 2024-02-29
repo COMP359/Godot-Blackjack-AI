@@ -127,6 +127,12 @@ func create_card_data():
 				card_values.append(10)
 			else:
 				card_values.append(11)	
+				
+	#Adds 4 times the amount of aces for testing
+	for i in range(4):
+		for suit in ["clubs", "diamonds", "hearts", "spades"]:
+			card_names.append("ace" + "_" + suit)
+			card_values.append(11)
 	
 	# Load card values and image paths into the dictionary
 	for card in range(len(card_names)):
@@ -236,50 +242,49 @@ func _on_exit_pressed():
 func _on_replay_pressed():
 	get_tree().change_scene_to_file("res://gameplay-scene/game.tscn")
 
-#THIS DOES NOT WORK FOR CASES WHERE PLAYER HAS ACES YET. WORKS FOR EVERYTHING ELSE THOUGH	
-func calculateTotal(cards):
-	var total = 0
-	var hasAce = false
 
-	for card in cards:
-		if card[0] == 11:  # Ace
-			hasAce = true
-		total += card[0]
-
-	if hasAce and total + 10 <= 21:
-		total += 10
-
-	return total
-	
 func _on_button_pressed():
-	var playerTotal = calculateTotal(playerCards)
-	print("Player total:", playerTotal)
-
+	print("Player score:", playerScore)
+	
 	var dealerUpCard = dealerCards[2][0]
 	print("Dealer up card:", dealerUpCard)
-	
-	if playerTotal >= 17 and playerTotal <= 20:
-		_on_stand_pressed()
-	elif playerTotal >= 13 and playerTotal <= 16:
-		if dealerUpCard >= 2 and dealerUpCard <= 6:
+
+	var hasAce = playerHasAce(playerCards)
+	print(hasAce)
+	if hasAce:
+		# Handle cases when player has an ace
+		if playerScore >= 19:
 			_on_stand_pressed()
+		elif playerScore == 18 and dealerUpCard <= 8:
+			_on_stand_pressed()
+		elif playerScore == 18 and dealerUpCard >= 9:
+			_on_hit_pressed()
 		else:
 			_on_hit_pressed()
-	elif playerTotal == 12:
-		if dealerUpCard >= 4 and dealerUpCard <= 6:
-			_on_stand_pressed()
-		else:
-			_on_hit_pressed()
-	elif playerTotal >= 4 and playerTotal <= 11:
-		_on_hit_pressed()
-	elif playerTotal == 21:
-		_on_stand_pressed()
-	elif playerTotal == 13 and dealerUpCard >= 7:
-		_on_hit_pressed()
-	elif playerTotal == 16 and dealerUpCard >= 7:
-		_on_hit_pressed()
-	elif playerTotal == 11 and dealerUpCard == 11:
-		_on_hit_pressed()
 	else:
-		_on_stand_pressed()	
+		# Handle cases when player does not have an ace
+		if playerScore >= 17 and playerScore <= 20:
+			_on_stand_pressed()
+		elif playerScore >= 13 and playerScore <= 16:
+			if dealerUpCard >= 2 and dealerUpCard <= 6:
+				_on_stand_pressed()
+			else:
+				_on_hit_pressed()
+		elif playerScore == 12:
+			if dealerUpCard >= 4 and dealerUpCard <= 6:
+				_on_stand_pressed()
+			else:
+				_on_hit_pressed()
+		elif playerScore >= 4 and playerScore <= 11:
+			_on_hit_pressed()
+		else:
+			_on_stand_pressed()
+
+func playerHasAce(cards):
+	for card in cards:
+		if card[0] == 11:
+			return true
+	return false
+
+
 		
