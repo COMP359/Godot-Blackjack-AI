@@ -107,7 +107,10 @@ text = "STAND"
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_fonts/font = ExtResource("2_sviuc")
-text = "Optimal Move
+theme_override_font_sizes/font_size = 25
+text = "OPTIMAL
+
+MOVE
 "
 
 [node name="Cards" type="MarginContainer" parent="."]

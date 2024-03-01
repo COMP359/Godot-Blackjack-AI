@@ -11,6 +11,7 @@ var dealerCards = []
 
 var cardsShuffled = {}
 
+var ace_found
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -62,7 +63,7 @@ func _on_hit_pressed():
 		if playerScore > 21:  # Score still surpasses 21
 			playerLose()
 			
-var ace_found
+
 func check_aces():
 	while playerScore > 21:
 		ace_found = false
