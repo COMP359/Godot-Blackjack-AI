@@ -24,7 +24,7 @@ func _ready():
 	updateText()
 	create_card_data()
 	
-	# Generate player cards	
+	# Generate initial 2 player cards	
 	await get_tree().create_timer(0.7).timeout
 	generate_card("player")
 	updateText()
@@ -59,12 +59,13 @@ func _on_hit_pressed():
 	if playerScore == 21:
 		_on_stand_pressed()  # Player auto-stands on 21
 	elif playerScore > 21:
-		check_aces()
+		check_aces()  # Check to see if any 11-aces can convert to 1-aces
 		if playerScore > 21:  # Score still surpasses 21
 			playerLose()
 			
 
 func check_aces():
+	# If player is over 21 and has any 11-aces, convert them to 1 so they stay under 21
 	while playerScore > 21:
 		ace_found = false
 		for card_index in range(len(playerCards)):
@@ -86,9 +87,7 @@ func recalculate_player_score():
 
 
 func _on_stand_pressed():
-	"""
-	Flip dealer's first card, dealer keeps hitting until score is above player.
-	"""
+	# Flip dealer's first card, dealer keeps hitting until score is above 16 or player's score
 	$Buttons/VBoxContainer/Hit.disabled = true
 	$Buttons/VBoxContainer/Stand.disabled = true
 	$Buttons/VBoxContainer/OptimalMove.disabled = true
@@ -122,7 +121,7 @@ func _on_stand_pressed():
 	# Dealer hits until score surpasses player or 17
 	while dealerScore < playerScore and dealerScore < 17:
 		await get_tree().create_timer(1.5).timeout
-		# Play "hit!" animation
+		# Play "hit!" animation for dealer
 		$AnimationPlayer.play("HitAnimationD")
 		generate_card("dealer")
 		updateText()
@@ -169,7 +168,7 @@ func generate_card(hand, back=false):
 	# Assuming you have already loaded card images into the dictionary as shown in your code
 	var random_card
 
-	# if back is true assign card image to back
+	# If back is true assign card image to back
 	if back:
 		# We display the back of the card, but a real card needs to be pulled
 		# so that it can be shown when the player Stands
@@ -177,7 +176,7 @@ func generate_card(hand, back=false):
 		dealerCards.append(card_images[cardsShuffled.pop_back()])
 	else:
 		# Get a random card
-		var random_card_name = cardsShuffled.pop_back() #card_names[randi() % card_names.size()]
+		var random_card_name = cardsShuffled.pop_back()
 		random_card = card_images[random_card_name] 
 		# random_card is an array [card value, card image path]
 
@@ -210,14 +209,13 @@ func generate_card(hand, back=false):
 
 
 func updateText():
-	"""
-	Update the labels displayed on screen for the dealer and player scores.
-	"""
+	# Update the labels displayed on screen for the dealer and player scores.
 	$DealerScore.text = str(dealerScore)
 	$PlayerScore.text = str(playerScore)
 
 
 func playerLose():
+	# Player has lost: display red text, disable buttons, ask to play again
 	$WinnerText.text = "DEALER\nWINS"
 	$WinnerText.set("theme_override_colors/font_color", "ff5342")
 	$Buttons/VBoxContainer/Hit.disabled = true
@@ -230,6 +228,8 @@ func playerLose():
 	
 	
 func playerWin(blackjack=false):
+	# Player has won: display text (already set if not blackjack),
+	# display buttons and ask to play again
 	if blackjack:
 		$WinnerText.text = "PLAYER WINS\nBY BLACKJACK"
 	$Buttons/VBoxContainer/Hit.disabled = true
@@ -243,6 +243,7 @@ func playerWin(blackjack=false):
 	
 	
 func playerDraw():
+	# Nobody wins: display white text, disable buttons and ask to play again
 	$WinnerText.text = "DRAW"
 	$WinnerText.set("theme_override_colors/font_color", "white")
 	$Buttons/VBoxContainer/Hit.disabled = true
@@ -263,11 +264,11 @@ func _on_replay_pressed():
 
 
 func _on_button_pressed():
+	# AI logic to determine optimal move
 	
-	
+	if len(dealerCards) < 2:  # Player clicked button before dealer cards loaded
+		return
 	var dealerUpCard = dealerCards[2][0]
-	
-
 	var hasAce = playerHasAce(playerCards)
 	
 	if hasAce:
@@ -304,6 +305,3 @@ func playerHasAce(cards):
 		if card[0] == 11:
 			return true
 	return false
-
-
-		
